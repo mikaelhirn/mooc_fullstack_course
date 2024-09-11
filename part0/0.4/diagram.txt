@@ -1,0 +1,32 @@
+sequenceDiagram
+participant browser
+participant server
+
+browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
+activate server
+server->>browser: HTML Document
+deactivate server
+
+browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
+activate server
+server->>browser: The CSS Document
+deactivate server
+
+browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.js
+activate server
+server->>browser: The JavaScript file
+deactivate server
+
+Note right of browser: The browser starts to execute main.js which starts to fetch the JSON.data from the server.
+
+browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+activate server
+server->>browser: [{"content":"test123","date":"2024-09-10T22:12:30.394Z"}, ...]
+deactivate server
+
+Note right of browser: The favicon library starts to load the favicon icon from the server.
+
+browser->>server: GET https://studies.cs.helsinki.fi/favicon.ico
+activate server
+server->>browser: The favicon website icon file.
+deactivate server
