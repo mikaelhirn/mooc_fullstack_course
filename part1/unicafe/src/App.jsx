@@ -41,25 +41,39 @@ const Statistics = (props) => {
   }
   return (
     <div>
-      good {props.good}<br />
-      neutral {props.neutral}<br />
-      bad {props.bad}<br />
-      <All good={props.good} neutral={props.neutral} bad={props.bad} />
-      <Average good={props.good} neutral={props.neutral} bad={props.bad} />
-      <Positive good={props.good} neutral={props.neutral} bad={props.bad} />
+      <table>
+      <tr>
+        <td>good</td><td>{props.good}</td>
+      </tr>
+      <tr>
+        <td>neutral</td><td>{props.neutral}</td>
+      </tr>
+      <tr>
+        <td>bad</td><td>{props.bad}</td>
+      </tr>
+      <tr>
+        <td>all</td><td><All good={props.good} neutral={props.neutral} bad={props.bad} /></td>
+      </tr>
+      <tr>
+        <td>average</td><td><Average good={props.good} neutral={props.neutral} bad={props.bad} /></td>
+      </tr>
+      <tr>
+        <td>positive</td><td><Positive good={props.good} neutral={props.neutral} bad={props.bad} /></td>
+      </tr>
+      </table>
     </div>)
 }
 
 const All = (props) => {
-  return <div>All: {(props.good + props.neutral + props.bad)}</div>
+  return (props.good + props.neutral + props.bad)
 }
 
 const Average = (props) => {
-  return <div>Average: {((props.good*1) + (props.bad*-1))/(props.good + props.neutral + props.bad)}</div>
+  return ((props.good*1) + (props.bad*-1))/(props.good + props.neutral + props.bad)
 }
 
 const Positive = (props) => {
-  return <div>Positive: {(props.good / (props.good + props.neutral + props.bad)) * 100 + "%"}</div>
+  return (props.good / (props.good + props.neutral + props.bad)) * 100 + "%"
 }
 
 export default App
