@@ -3,14 +3,16 @@ import axios from 'axios'
 import ListContacts from './ListContacts'
 import PersonForm from './PersonForm'
 import Filter from './Filter'
+import Notification from './Notification'
 import contacts from './services/contacts'
+import './index.css'
 
 const App = () => {
 	const [persons, setPersons] = useState([])
 	const [newName, setNewName] = useState('')
 	const [newNumber, setNewNumber] = useState('')
 	const [newFilter, setNewFilter] = useState('')
-
+	const [notificationMessage, setNotificationMessage] = useState({})
 
 	useEffect(() => {
 		contacts
@@ -31,16 +33,22 @@ const App = () => {
 			if (confirmed){
 				const personId = persons.find((x) => x.name === newName).id
 				contacts
-					.update(personId, personObject)
-					.then(putPerson => {
-						setPersons(persons.map((x) => x.id === personId ? putPerson : x))
-						setNewName('')
-						setNewNumber('')
-					})
-					.catch((error) => {
-						console.log('Inserting data failed', error)
-
-					})
+				.update(personId, personObject)
+				.then(putPerson => {
+					setPersons(persons.map((x) => x.id === personId ? putPerson : x))
+					setNewName('')
+					setNewNumber('')
+					setNotificationMessage({"msg": `Updated ${newName}`, "type": 'ok'})
+					setTimeout(() => {
+						setNotificationMessage(null)
+					}, 5000)
+				})
+				.catch(error => {
+					setNotificationMessage({"msg": `Inserting data failed ${error}`, "type": 'error'})
+					setTimeout(() => {
+						setNotificationMessage(null)
+					}, 5000)
+				})
 			}
 		}else{
 			contacts
@@ -72,8 +80,11 @@ const App = () => {
 		contacts
 		.deletePerson(id)
 		.then((delPerson) => {
-			console.log('::::::::', delPerson.id)
 			setPersons(persons.filter(person => person.id !== delPerson.id))
+			setNotificationMessage({"msg": `Removed ${delPerson.name}`, "type": 'ok'})
+			setTimeout(() => {
+				setNotificationMessage(null)
+			}, 5000)
 		})
 		.catch((error) => {
 		console.log('Failed to delete..', error)
@@ -82,7 +93,7 @@ const App = () => {
 	return (
 		<div>
 			<h1>Phonebook</h1>
-			<Notification message="{errorMessage}" />
+			<Notification message={notificationMessage} />
 			<h2>Search</h2>
 			<Filter newFilter={newFilter} handleNewFilter={handleNewFilter} />
 			<h2>Add New Contact</h2>
