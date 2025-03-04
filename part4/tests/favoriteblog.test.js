@@ -2,8 +2,8 @@ const { test, describe } = require('node:test')
 const assert = require('node:assert')
 const listHelper = require('../utils/list_helper')
 
-describe('totalLikes', () => {
-	test('count total likes', () => {
+describe('favoriteblog', () => {
+	test('find blog with most likes', () => {
 
 		const blogs = [
 		  {
@@ -56,7 +56,12 @@ describe('totalLikes', () => {
 		  }  
 		]	
 
-		const result = listHelper.totalLikes(blogs)
-		assert.deepStrictEqual(result, 36)
+		const result = listHelper.favoriteBlog(blogs)
+		const expected = {
+		    title: "Canonical string reduction",
+		    author: "Edsger W. Dijkstra",
+		    likes: 12,
+		}
+		assert.deepStrictEqual(result, expected)
 	})
 })
