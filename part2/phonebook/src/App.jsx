@@ -17,8 +17,8 @@ const App = () => {
 	useEffect(() => {
 		contacts
 		.getPersons()
-		.then(initialPersons => {
-		setPersons(initialPersons)
+		.then(allPersons => {
+		setPersons(allPersons)
     })
 	}, [])
 
@@ -54,12 +54,17 @@ const App = () => {
 			contacts
 			.postPerson(personObject)
 			.then(postedPerson => {
+				postedPerson.id = 'temp'
 				setPersons(persons.concat(postedPerson))
 				setNewName('')
 				setNewNumber('')
 		})
 		.catch((error) => {
-			console.log('Failed to add object..')
+			setNotificationMessage({"msg": `Inserting data failed ${error.response.data.error}`, "type": 'error'})
+			setTimeout(() => {
+				setNotificationMessage(null)
+			}, 5000)
+			
 		})
 		}
 	}
@@ -79,9 +84,9 @@ const App = () => {
 	const handleDeleteName = (id, event) => {
 		contacts
 		.deletePerson(id)
-		.then((delPerson) => {
-			setPersons(persons.filter(person => person.id !== delPerson.id))
-			setNotificationMessage({"msg": `Removed ${delPerson.name}`, "type": 'ok'})
+		.then((res) => {
+			setPersons(persons.filter(person => person.id !== id))
+			setNotificationMessage({"msg": `Removed ${id}`, "type": 'ok'})
 			setTimeout(() => {
 				setNotificationMessage(null)
 			}, 5000)
