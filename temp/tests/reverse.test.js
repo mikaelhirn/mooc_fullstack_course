@@ -12,7 +12,7 @@ test('reverse of a', () => {
 test('reverse of react', () => {
 	const result = reverse('react')
 
-	assert.strictEqual(result, 'tkaer')
+	assert.strictEqual(result, 'tcaer')
 })
 
 
