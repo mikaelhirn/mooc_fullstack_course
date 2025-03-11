@@ -16,11 +16,18 @@ beforeEach(async () => {
 	await Promise.all(promiseArray)
 })
 
-test.only('verify that the tesponse is in JSON', async () => {
+test('verify that the tesponse is in JSON', async () => {
 	await api
 		.get('/api/blogs/')
 		.expect(200)
 		.expect('Content-Type', /application\/json/)
+})
+
+test.only('test that the identifier is name id', async () => {
+	const res = await api.get('/api/blogs/')
+	res.body.forEach(blog => {
+		assert.ok(blog.id !== undefined, 'ID is undefined.')
+	})
 })
 
 after(async () => {
