@@ -21,6 +21,13 @@ const initBlogs = [
 	}
 ]
 
+const getLatest = async () => {
+	const latest = await Blog
+		.findOne()
+		.sort({ _id: -1 })
+	return latest
+}
+
 module.exports = {
-	initBlogs
+	initBlogs, getLatest
 }
