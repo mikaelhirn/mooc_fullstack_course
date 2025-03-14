@@ -18,13 +18,17 @@ const initBlogs = [
 		author: "timppa",
 		url: "www.fillarit.org",
 		likes: 9
+	},
+	{
+		title: "koneet",
+		author: "kim",
+		url: "www.koneet.org"
 	}
 ]
 
 const getLatest = async () => {
 	const latest = await Blog
-		.findOne()
-		.sort({ _id: -1 })
+		.find({})
 	return latest
 }
 

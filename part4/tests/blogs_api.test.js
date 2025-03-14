@@ -32,7 +32,7 @@ test('test that the identifier is name id', async () => {
 	})
 })
 
-test.only('test that creating a new message with POST works', async () => {
+test('test that creating a new message with POST works', async () => {
 	let res = await api.get('/api/blogs/')
 
 	const nrOfBLogsBeginning = res.body.length
@@ -60,6 +60,15 @@ test.only('test that creating a new message with POST works', async () => {
 	assert.ok(latestBlog.author === newObj.author)
 	assert.ok(latestBlog.url === newObj.url)
 	assert.ok(latestBlog.likes === newObj.likes)
+})
+
+test.only('test that a missing likes default to 0', async () => {
+	const res = await api.get('/api/blogs/')
+	res.body.forEach(x => {
+		if (x.title === 'koneet'){
+			assert.ok(x.likes === 0, 'Likes should default to 0')
+		}
+	})
 })
 
 after(async () => {
