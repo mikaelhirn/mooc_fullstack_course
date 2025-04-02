@@ -9,9 +9,12 @@ blogsRouter.get('/', (req, res) => {
 		})
 })
 
-blogsRouter.post('/', (req, res) => {
+blogsRouter.post('/', (req, res, next) => {
 	const blog = new Blog(req.body)
 	console.log('blog: ', blog)
+	if(blog.url == undefined || blog.title == undefined){
+		res.status(404).end()
+	}
 	blog
 		.save()
 		.then(savedData => {

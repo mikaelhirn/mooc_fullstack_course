@@ -62,13 +62,30 @@ test('test that creating a new message with POST works', async () => {
 	assert.ok(latestBlog.likes === newObj.likes)
 })
 
-test.only('test that a missing likes default to 0', async () => {
+test('test that a missing likes default to 0', async () => {
 	const res = await api.get('/api/blogs/')
 	res.body.forEach(x => {
 		if (x.title === 'koneet'){
 			assert.ok(x.likes === 0, 'Likes should default to 0')
 		}
 	})
+})
+
+test.only('test that missing title or url generates 404', async () => {
+	const newObject = {
+		author: "Kermit",
+		url: "www.www.fi",
+		likes: "2"
+	}
+
+	await api
+		.post('/api/blogs/')
+		.send(newObject)
+		.expect(404)
+		.then(() => {
+			console.log('Got 404')
+		})
+
 })
 
 after(async () => {
