@@ -23,6 +23,30 @@ blogsRouter.post('/', (req, res, next) => {
 		.catch(error => next(error))
 })
 
+blogsRouter.put('/:id', (req, res, next) => {
+	const id = req.params.id
+	const likes = req.body.likes
+
+	if(id === undefined){
+		res.status(404).end()
+	}
+
+	Blog
+		.findById(id)
+		.then(blog => {
+			if(!blog){
+				return res.status(404).end()
+			}
+
+			blog.likes = likes
+
+			return blog.save().then((updatedBlog) => {
+				res.json(updatedBlog)
+			})
+		})
+		.catch(error => next(error))
+})
+
 blogsRouter.delete('/:id', (req, res, next) => {
 	const id = req.params.id
 	console.log(id)

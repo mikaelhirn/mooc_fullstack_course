@@ -3,7 +3,7 @@ const Blog = require('../models/blog.js')
 const initBlogs = [
 	{
 		title: "Autot",
-		author: "MAsa",
+		author: "Masa",
 		url: "www.autot.org",
 		likes: 4
 	},

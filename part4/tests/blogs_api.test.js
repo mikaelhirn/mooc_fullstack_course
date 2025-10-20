@@ -88,7 +88,7 @@ test('test that missing title or url generates 404', async () => {
 
 })
 
-test.only('test that a single blogpost is deleted', async () => {
+test('test that a single blogpost is deleted', async () => {
 	const newObject = {
 		title: "Mikkis DELETION website",
 		author: "Mikki",
@@ -124,6 +124,31 @@ test.only('test that a single blogpost is deleted', async () => {
 	lenAfterDeletion = res.body.length
 
 	assert.ok(lenAfterDeletion === lenWithBlog - 1, 'Deleting single blog entry.')
+})
+
+test.only('test that the amount of likes update', async () => {
+	origRes = await api.get('/api/blogs')
+
+	let id
+	let newObject
+	let origLikes
+
+	origRes.body.forEach(x => {
+		if(x.author === 'Masa'){
+			newObject = x
+			origLikes = x.likes
+			newObject.likes = newObject.likes + 1
+		}
+	})
+	await api
+		.put(`/api/blogs/${newObject.id}`)
+		.send(newObject)
+		.expect(200)
+		.then(() => {
+			console.log(`Updated to ${newObject.likes} likes.`)
+		})
+
+	assert.ok(newObject.likes === origLikes + 1)
 })
 
 after(async () => {
