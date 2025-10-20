@@ -71,7 +71,7 @@ test('test that a missing likes default to 0', async () => {
 	})
 })
 
-test.only('test that missing title or url generates 404', async () => {
+test('test that missing title or url generates 404', async () => {
 	const newObject = {
 		author: "Kermit",
 		url: "www.www.fi",
@@ -86,6 +86,44 @@ test.only('test that missing title or url generates 404', async () => {
 			console.log('Got 404')
 		})
 
+})
+
+test.only('test that a single blogpost is deleted', async () => {
+	const newObject = {
+		title: "Mikkis DELETION website",
+		author: "Mikki",
+		url: "www.mikki.fi",
+		likes: 23
+	}
+
+	await api
+		.post('/api/blogs/')
+		.send(newObject)
+		.expect(201)
+		.then(() => {
+			console.log('Added newObject for deletion test')
+		})
+
+	res = await api.get('/api/blogs')
+	lenWithBlog = res.body.length
+
+	res.body.forEach(x => {
+		if(x.author === 'Mikki'){
+			idToBeDeleted = x.id
+		}
+	})
+
+	await api
+		.delete(`/api/blogs/${idToBeDeleted}`)
+		.expect(204)
+		.then(() => {
+			console.log('Deleted single blog post.')
+		})
+
+	res = await api.get('/api/blogs')
+	lenAfterDeletion = res.body.length
+
+	assert.ok(lenAfterDeletion === lenWithBlog - 1, 'Deleting single blog entry.')
 })
 
 after(async () => {

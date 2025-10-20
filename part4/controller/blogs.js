@@ -23,4 +23,20 @@ blogsRouter.post('/', (req, res, next) => {
 		.catch(error => next(error))
 })
 
+blogsRouter.delete('/:id', (req, res, next) => {
+	const id = req.params.id
+	console.log(id)
+
+	if(id === undefined){
+		res.status(404).end()
+	}
+
+	Blog
+		.findByIdAndDelete(id)
+		.then(deletedData => {
+			res.status(204).json(deletedData)
+		})
+		.catch(error => next(error))
+})
+
 module.exports = blogsRouter
