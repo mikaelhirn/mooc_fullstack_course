@@ -2,7 +2,9 @@ const { test, after, beforeEach } = require('node:test')
 const assert = require('node:assert')
 const supertest = require('supertest')
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 const Blog = require('../models/blog.js')
+const User = require('../models/user.js')
 const app = require('../app')
 const helper = require('../tests/test_helper.js')
 
@@ -126,7 +128,7 @@ test('test that a single blogpost is deleted', async () => {
 	assert.ok(lenAfterDeletion === lenWithBlog - 1, 'Deleting single blog entry.')
 })
 
-test.only('test that the amount of likes update', async () => {
+test('test that the amount of likes update', async () => {
 	origRes = await api.get('/api/blogs')
 
 	let id
@@ -149,6 +151,37 @@ test.only('test that the amount of likes update', async () => {
 		})
 
 	assert.ok(newObject.likes === origLikes + 1)
+})
+
+test.only('test username creation with a fresh name', async () => {
+	await User.deleteMany({})
+
+	const passwordHash = await bcrypt.hash('sala', 10)
+	const user = new User({ username: 'root', name: 'root mc rooty', passwordHash })
+	await user.save()
+
+	const usersAtStart = await helper.usersInDb()
+	console.log(`Users at start: ${usersAtStart}`)
+	
+	const newUser = {
+		username: 'kike',
+		name: 'Kike Elomaa',
+		password: 'salainen'
+	}
+
+	await api
+		.post('/api/users/')
+		.send(newUser)
+		.expect(201)
+		.expect('Content-Type', /application\/json/)
+
+	const usersAtEnd = await helper.usersInDb()
+
+	assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1)
+	console.log(`UAS: ${usersAtStart} UAE: ${usersAtEnd}`)
+
+	const usernames = usersAtEnd.map(u => u.username)
+	assert(usernames.includes(newUser.username))
 })
 
 after(async () => {
