@@ -6,6 +6,7 @@ const cors = require('cors')
 const morgan = require('morgan')
 const blogsRouter = require('./controller/blogs')
 const usersRouter = require('./controller/users')
+const loginRouter = require('./controller/login')
 
 mongoose.set('strictQuery', false)
 
@@ -17,5 +18,6 @@ mongoose.connect(config.MONGO_URL)
 
 app.use('/api/blogs/', blogsRouter)
 app.use('/api/users/', usersRouter)
+app.use('/api/login/', loginRouter)
 
 module.exports = app
