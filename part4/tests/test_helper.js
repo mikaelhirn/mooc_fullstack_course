@@ -22,7 +22,7 @@ const initBlogs = [
 	},
 	{
 		title: "koneet",
-		author: "kim",
+		author: "kike",
 		url: "www.koneet.org"
 	}
 ]

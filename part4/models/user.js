@@ -1,13 +1,13 @@
 const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
-	username: String,
+	author: String,
 	name: String,
 	passwordHash: String,
-	notes: [
+	blogs: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Note'
+			ref: 'Blog'
 		}
 	],
 })

@@ -157,14 +157,14 @@ test.only('test username creation with a fresh name', async () => {
 	await User.deleteMany({})
 
 	const passwordHash = await bcrypt.hash('sala', 10)
-	const user = new User({ username: 'root', name: 'root mc rooty', passwordHash })
+	const user = new User({ author: 'root', name: 'root mc rooty', passwordHash })
 	await user.save()
 
 	const usersAtStart = await helper.usersInDb()
 	console.log(`Users at start: ${usersAtStart}`)
 	
 	const newUser = {
-		username: 'kike',
+		author: 'kike',
 		name: 'Kike Elomaa',
 		password: 'salainen'
 	}
@@ -182,6 +182,7 @@ test.only('test username creation with a fresh name', async () => {
 
 	const usernames = usersAtEnd.map(u => u.username)
 	assert(usernames.includes(newUser.username))
+	console.log(usersAtEnd)
 })
 
 after(async () => {
