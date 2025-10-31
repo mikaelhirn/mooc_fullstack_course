@@ -13,10 +13,13 @@ const getAll = () => {
 }
 
 const create = async newObject => {
-  const config = {
-    headers: { auth: token  }
-  }
-  const res = await axios.post(baseUrl, newObject, config)
+	const newBlog = {
+		title: newObject.newTitle,
+		author: newObject.newAuthor,
+		url: newObject.newUrl,
+		auth: token
+	}
+  const res = await axios.post(baseUrl, newBlog)
   return res.data
 }
 

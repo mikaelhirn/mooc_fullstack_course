@@ -9,6 +9,9 @@ const App = () => {
   const [author, setAuthor] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [newAuthor, setNewAuthor] = useState('')
+  const [newTitle, setNewTitle] = useState('')
+  const [newUrl, setNewUrl] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -35,6 +38,24 @@ const App = () => {
 		setUser(user)
 		setAuthor('')
 		setPassword('')
+	  } catch (error) {
+		console.log(error)
+        setErrorMessage('wrong credentials')
+		setTimeout(() => {
+          setErrorMessage(null)
+		}, 5000)
+	  }
+  }
+
+  const handleCreateNew = async event => {
+    event.preventDefault()
+
+	  try{
+        const newBlog = await blogService.create({ newAuthor, newTitle, newUrl })
+		  setBlogs(blogs.concat({ title: newTitle, author: newAuthor, id: newBlog.id }))
+        setNewAuthor('')
+        setNewTitle('')
+        setNewUrl('')
 	  } catch (error) {
 		console.log(error)
         setErrorMessage('wrong credentials')
@@ -90,7 +111,42 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-		<p>{user.author} is logged in. <button name='Logout' onClick={handleLogout}>LOGOUT</button></p>
+		<p>{user.author} is logged in. <button name='Logout' onClick={handleLogout}>Logout</button></p>
+		  <h2>create new blog entry</h2>
+			<form onSubmit={handleCreateNew}>
+				<div>
+					<label>
+					  title
+						<input
+							type="text"
+							value={newTitle}
+							onChange={({ target }) => setNewTitle(target.value)}
+						/>
+					</label>
+				</div>
+				<div>
+				<div>
+					<label>
+					  author
+						<input
+							type="text"
+							value={newAuthor}
+							onChange={({ target }) => setNewAuthor(target.value)}
+						/>
+					</label>
+				</div>
+					<label>
+					  url
+						<input
+							type="text"
+							value={newUrl}
+							onChange={({ target }) => setNewUrl(target.value)}
+						/>
+					</label>
+				</div>
+				<button type="submit">Create</button>
+			</form>
+		<br />
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
