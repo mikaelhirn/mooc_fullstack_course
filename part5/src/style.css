@@ -1,0 +1,16 @@
+.error {
+color: red;
+border-color: dark-red;
+border-style: solid;
+border-width: 2px;
+padding: 5px;
+margin: 5px;
+}
+.ok {
+color: green;
+border-color: dark-red;
+border-style: solid;
+border-width: 2px;
+padding: 5px;
+margin: 5px;
+}
