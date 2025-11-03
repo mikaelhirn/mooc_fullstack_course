@@ -40,7 +40,8 @@ blogsRouter.post('/', async (req, res, next) => {
 	const blog = new Blog(req.body)
 
 	if(blog.url == undefined || blog.title == undefined){
-		res.status(404).end()
+		console.log(blog)
+		return res.status(404).end()
 	}
 	
 	const savedBlog = await	blog
@@ -52,8 +53,6 @@ blogsRouter.post('/', async (req, res, next) => {
 		.catch(error => next(error))
 
 	await user.save()
-
-	res.status(201).json(savedBlog)
 })
 
 blogsRouter.put('/:id', (req, res, next) => {
