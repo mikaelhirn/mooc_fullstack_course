@@ -14,9 +14,9 @@ const getAll = () => {
 
 const create = async newObject => {
 	const newBlog = {
-		title: newObject.newTitle,
-		author: newObject.newAuthor,
-		url: newObject.newUrl,
+		title: newObject.title,
+		author: newObject.author,
+		url: newObject.url,
 		auth: token
 	}
   const res = await axios.post(baseUrl, newBlog)

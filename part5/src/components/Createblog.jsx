@@ -1,21 +1,41 @@
 import Notification from './Notification'
+import { useState, useImperativeHandle } from 'react'
 
 const Createblog = ({
 	handleLogout,
-	handleCreateNew,
+	createBlog,
 	blogFormVisible,
 	setBlogFormVisible,
 	notificationMessage,
 	user,
-	newTitle,
-	newAuthor,
-	newUrl,
-	setNewTitle,
-	setNewAuthor,
-	setNewUrl
+	ref
 }) => {
+	const [newAuthor, setNewAuthor] = useState('')
+	const [newTitle, setNewTitle] = useState('')
+	const [newUrl, setNewUrl] = useState('')
+
 	const hideWhenVisible = { display: blogFormVisible ? '' : 'none' }
 	const showWhenVisible = { display: blogFormVisible ? 'none' : '' }
+
+	const handleCreateNew = (event) => {
+		event.preventDefault()
+		createBlog({
+			title: newTitle,
+			author: newAuthor,
+			url: newUrl
+		})
+		setNewAuthor('')
+		setNewTitle('')
+		setNewUrl('')
+	}
+
+	const toggleVisibility = () => {
+		setBlogFormVisible(!blogFormVisible)
+	}
+
+	useImperativeHandle(ref, () => {
+		return {toggleVisibility}
+	})
 
 	if (blogFormVisible === true) {
 		return (

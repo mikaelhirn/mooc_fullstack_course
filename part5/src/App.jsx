@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Notification from './components/Notification'
 import Createblog from './components/Createblog'
 import Blog from './components/Blog'
@@ -12,10 +12,9 @@ const App = () => {
 	const [author, setAuthor] = useState('')
 	const [password, setPassword] = useState('')
 	const [user, setUser] = useState(null)
-	const [newAuthor, setNewAuthor] = useState('')
-	const [newTitle, setNewTitle] = useState('')
-	const [newUrl, setNewUrl] = useState('')
 	const [blogFormVisible, setBlogFormVisible] = useState(false)
+
+	const blogFormRef = useRef()
 
 	useEffect(() => {
 		blogService.getAll().then(blogs =>
@@ -51,15 +50,14 @@ const App = () => {
 		}
 	}
 
-	const handleCreateNew = async event => {
-		event.preventDefault()
-
+	const handleCreateNew = (blogObject) => {
 		try{
-			const newBlog = await blogService.create({ newAuthor, newTitle, newUrl })
-			setBlogs(blogs.concat({ title: newTitle, author: newAuthor, id: newBlog.id }))
-			setNewAuthor('')
-			setNewTitle('')
-			setNewUrl('')
+			blogService
+				.create(blogObject)
+				.then(returnedBlog => {
+					setBlogs(blogs.concat({ title: returnedBlog.title, author: returnedBlog.author, id: returnedBlog.id }))
+				})
+			blogFormRef.current.toggleVisibility()
 			setNotificationMessage({ "msg": 'New blog added!', "type": 'ok' })
 			setTimeout(() => {
 				setNotificationMessage(null)
@@ -118,7 +116,7 @@ const App = () => {
 	}
 	return (
 		<div>
-			<Createblog user={user} handleLogout={handleLogout} handleCreateNew={handleCreateNew} notificationMessage={notificationMessage} setBlogFormVisible={setBlogFormVisible} blogFormVisible={blogFormVisible} newTitle={newTitle} newAuthor={newAuthor} newUrl={newUrl} setNewTitle={setNewTitle} setNewAuthor={setNewAuthor} setNewUrl={setNewUrl} />
+			<Createblog ref= {blogFormRef} user={user} handleLogout={handleLogout} createBlog={handleCreateNew} notificationMessage={notificationMessage} setBlogFormVisible={setBlogFormVisible} blogFormVisible={blogFormVisible} />
 			<br />
 			{blogs.map(blog =>
 				<Blog key={blog.id} blog={blog} />
