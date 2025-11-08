@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import Notification from './components/Notification'
 import Createblog from './components/Createblog'
 import Blog from './components/Blog'
+import Toggleview from './components/Toggleview'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import './style.css'
@@ -55,7 +56,7 @@ const App = () => {
 			blogService
 				.create(blogObject)
 				.then(returnedBlog => {
-					setBlogs(blogs.concat({ title: returnedBlog.title, author: returnedBlog.author, id: returnedBlog.id }))
+					setBlogs(blogs.concat({ title: returnedBlog.title, author: returnedBlog.author, url: returnedBlog.url, id: returnedBlog.id }))
 				})
 			blogFormRef.current.toggleVisibility()
 			setNotificationMessage({ "msg": 'New blog added!', "type": 'ok' })
@@ -119,7 +120,9 @@ const App = () => {
 			<Createblog ref= {blogFormRef} user={user} handleLogout={handleLogout} createBlog={handleCreateNew} notificationMessage={notificationMessage} setBlogFormVisible={setBlogFormVisible} blogFormVisible={blogFormVisible} />
 			<br />
 			{blogs.map(blog =>
-				<Blog key={blog.id} blog={blog} />
+				<Toggleview key={blog.id} blog={blog}>
+					<Blog key={blog.id} blog={blog} />
+				</Toggleview>
 			)}
 		</div>
 	)

@@ -87,6 +87,7 @@ const Createblog = ({
 		return (
 			<div>
 				<h2>blogs</h2>
+				<p>{user.author} is logged in. <button name='Logout' onClick={handleLogout}>Logout</button></p>
 				<button onClick={() => setBlogFormVisible(true)}>Insert blog</button>
 			</div>
 		)
