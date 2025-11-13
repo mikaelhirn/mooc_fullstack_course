@@ -8,7 +8,7 @@ import loginService from './services/login'
 import './style.css'
 
 const App = () => {
-	const [blogs, setBlogs] = useState([])
+	let [blogs, setBlogs] = useState([])
 	const [notificationMessage, setNotificationMessage] = useState({})
 	const [author, setAuthor] = useState('')
 	const [password, setPassword] = useState('')
@@ -19,7 +19,7 @@ const App = () => {
 
 	useEffect(() => {
 		blogService.getAll().then(blogs =>
-			setBlogs( blogs )
+			setBlogs( blogs.sort((x) => x.likes).reverse() )
 		)
 	}, [])
 
@@ -65,7 +65,7 @@ const App = () => {
 			}, 5000)
 		} catch (error) {
 			console.log(error)
-			setNotificationMessage({ "msg": 'Unable to create blog.', "type": 'error' })
+			setNotificationMessage({ "msg": 'Unable to create blog', "type": 'error' })
 			setTimeout(() => {
 				setNotificationMessage(null)
 			}, 5000)
@@ -82,13 +82,31 @@ const App = () => {
 			}, 5000)
 		} catch (error) {
 			console.log(error)
-			setNotificationMessage({ "msg": 'Unable to add like.', "type": 'error' })
+			setNotificationMessage({ "msg": 'Unable to add like', "type": 'error' })
 			setTimeout(() => {
 				setNotificationMessage(null)
 			}, 5000)
 		}
 	}
 
+	const handleDel = (id) => {
+		try {
+			blogService
+			.del(id)
+			blogs = blogs.filter((x) => x.id != id)
+			setBlogs(blogs)
+			setNotificationMessage({ "msg": 'Blog deleted', "type": 'ok' })
+			setTimeout(() => {
+				setNotificationMessage(null)
+			}, 5000)
+		} catch (error) {
+			console.log(error)
+			setNotificationMessage({ "msg": 'Unable to delete blog', "type": 'error' })
+			setTimeout(() => {
+				setNotificationMessage(null)
+			}, 5000)
+		}
+	}
 	const handleLogout = async event => {
 		event.preventDefault()
 
@@ -135,11 +153,11 @@ const App = () => {
 	return (
 		<div>
 			<Notification notification={notificationMessage} />
-			<Createblog ref= {blogFormRef} user={user} handleLogout={handleLogout} createBlog={handleCreateNew} notificationMessage={notificationMessage} setBlogFormVisible={setBlogFormVisible} blogFormVisible={blogFormVisible} />
+			<Createblog ref={blogFormRef} user={user} handleLogout={handleLogout} createBlog={handleCreateNew} notificationMessage={notificationMessage} setBlogFormVisible={setBlogFormVisible} blogFormVisible={blogFormVisible} />
 			<br />
 			{blogs.map(blog =>
 				<Toggleview key={blog.id} blog={blog}>
-					<Blog key={blog.id} blog={blog} handleLike={handleLike} />
+					<Blog key={blog.id} blog={blog} handleLike={handleLike} handleDel={handleDel} />
 				</Toggleview>
 			)}
 		</div>

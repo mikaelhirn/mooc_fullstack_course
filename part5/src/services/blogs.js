@@ -30,9 +30,14 @@ const addLike = async blog => {
 	return req
 }
 
+const del = async id => {
+	const url = `${baseUrl}/${id}`
+	const req = axios.delete(url)
+	return req
+}
 const update = (id, newObject) => {
   const req = axios.put(`${ baseUrl }/${id}`, newObject)
   return req.then(res => res.data)
 }
 
-export default { getAll, setToken, addLike, create, update }
+export default { getAll, setToken, addLike, create, update, del }
