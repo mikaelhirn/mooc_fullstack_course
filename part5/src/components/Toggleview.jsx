@@ -24,7 +24,7 @@ const Toggleview = (props) => {
                 <button onClick={toggleVisibility}>{visible ? 'Hide' : 'Show'}</button>
             </div>
             <div style={hideWhenVisible}>
-                {props.blog.title}
+                <p id="title">{props.blog.title}</p> | <p id="author">{props.blog.author}</p>
             </div>
             <div style={showWhenVisible}>
                 {props.children}

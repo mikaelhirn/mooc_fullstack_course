@@ -4,8 +4,6 @@ import { useState, useImperativeHandle } from 'react'
 const Createblog = ({
     handleLogout,
     createBlog,
-    blogFormVisible,
-    setBlogFormVisible,
     notificationMessage,
     user,
     ref
@@ -13,6 +11,7 @@ const Createblog = ({
     const [newAuthor, setNewAuthor] = useState('')
     const [newTitle, setNewTitle] = useState('')
     const [newUrl, setNewUrl] = useState('')
+    const [blogFormVisible, setBlogFormVisible] = useState(false)
 
     const showWhenVisible = { display: blogFormVisible ? 'none' : '' }
 

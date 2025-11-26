@@ -39,5 +39,13 @@ export default [
             'no-console': 'off',
             'no-tabs': 'error'
         }
+    },
+    {
+        files: ['**/*.test.{js,jsx}'],
+        languageOptions: {
+            globals: {
+                ...globals.vitest
+            }
+        }
     }
 ]
