@@ -26,14 +26,12 @@ describe('Testing the form', () => {
 
         const likes_element = screen.queryAllByText('Likes')
         expect(likes_element).toHaveLength(0)
-        // screen.debug()
     })
 
     test('<Toggleview /> renders url and likes', async () => {
         render(<Toggleview blog={_blog}><Blog key={_blog.id} blog={_blog} /></Toggleview>)
         const user = userEvent.setup()
         const button = screen.getByText('Show')
-        screen.debug()
         await user.click(button)
 
         const likes_element = screen.queryAllByText('Like')
@@ -41,5 +39,14 @@ describe('Testing the form', () => {
         const url_element = screen.queryAllByText('URL', { exact: false })
         expect(url_element).toHaveLength(1)
 
+    })
+    test('<Toggleview /> clicking like twise calls the event handler twice.', async () => {
+        const mockHandled = vi.fn()
+        render(<Toggleview blog={_blog}><Blog key={_blog.id} blog={_blog} handleLike={mockHandled}/></Toggleview>)
+        const user = userEvent.setup()
+        const button = screen.getByText('Like')
+        await user.click(button) //1. click
+        await user.click(button) //2. click
+        expect(mockHandled.mock.calls).toHaveLength(2)
     })
 })
