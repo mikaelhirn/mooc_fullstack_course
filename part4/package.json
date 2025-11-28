@@ -1,11 +1,13 @@
 {
   "scripts": {
     "test": "node --test",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "test:test": "cross-env NODE_ENV=test node --watch index.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
+    "cross-env": "^10.1.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
